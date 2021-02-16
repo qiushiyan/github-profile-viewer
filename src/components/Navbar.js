@@ -31,40 +31,10 @@ const Wrapper = styled.nav`
     color: var(--clr-grey-5);
     cursor: pointer;
   }
-  .login {
-    position: relative;
-    .tooltip {
-      visibility: hidden;
-      width: 300px;
-      font-size: 0.6rem;
-      text-align: left;
-      text-transform: none;
-      padding: 10px 5px;
-      background-color: #222;
-      color: hsl(209, 23%, 60%);
-      border-radius: 6px;
-      padding: 5px 0;
-      /* Position the tooltip */
-      position: absolute;
-      z-index: 1;
-      top: -5px;
-      left: 115%;
-    }
-    &:hover .tooltip {
-      visibility: visible;
-      padding: 10px 5px;
-    }
-  }
 `;
 
 const Navbar = () => {
-  const {
-    isAuthenticated,
-    loginWithRedirect,
-    logout,
-    user,
-    isLoading,
-  } = useAuth0();
+  const { isAuthenticated, logout, user, isLoading } = useAuth0();
   const isUser = isAuthenticated && user;
 
   return (
@@ -74,16 +44,6 @@ const Navbar = () => {
         <h4>
           Welcome, <strong>{user.name.toUpperCase()}</strong>
         </h4>
-      )}
-      {!isUser && <h4>Github Profile Viewer</h4>}
-      {!isUser && (
-        <button className="login" onClick={loginWithRedirect}>
-          Login
-          <div className="tooltip">
-            You do not need to login to use this app, but there could be an
-            60-requests-per-hour rate limit shared by all anonymous users.
-          </div>
-        </button>
       )}
       {isUser && (
         <button
