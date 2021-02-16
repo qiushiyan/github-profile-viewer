@@ -73,12 +73,9 @@ const Wrapper = styled.div`
   }
 `;
 const ErrorWrapper = styled.article`
-  position: absolute;
-  width: 90vw;
-  top: 0;
-  left: 0;
-  transform: translateY(-100%);
   text-transform: capitalize;
+  text-align: center;
+  margin-top: 0.5rem;
   p {
     color: red;
     letter-spacing: var(--spacing);
@@ -93,12 +90,11 @@ const Search = () => {
     searchGithubUser(user)
   };
 
+  console.log("error from search component", error)
+
   return (
     <section className="section">
       <Wrapper className="section-center">
-        {error.show && <ErrorWrapper>
-          <p>{error.msg}</p>
-        </ErrorWrapper>}
         <form onSubmit={e => handleSubmit(e)}>
           <div className="form-control">
             <MdSearch />
@@ -114,6 +110,11 @@ const Search = () => {
         </form>
         <h3>requests: {requests} / 60</h3>
       </Wrapper>
+      {error.show && (
+        <ErrorWrapper>
+          <p>{error.msg}</p>
+        </ErrorWrapper>
+      )}
     </section>
   );
 };

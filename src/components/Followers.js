@@ -113,7 +113,7 @@ const Followers = () => {
             )
           })}
         </div>}
-      {!loading && !followers.length && <p>The user has no follower</p>}
+      {!loading && !followers.length && <p style={{ textAlign: 'center' }}>The user has no follower</p>}
     </Wrapper>
   )
 };

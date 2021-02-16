@@ -28,41 +28,43 @@ const GithubProvider = ({ children }) => {
     });
   };
 
-  useEffect(checkRequests, [githubUser]);
+  useEffect(checkRequests, []);
+
+  const toggleError = (show = false, msg = "") => {
+    setError({ show, msg });
+  };
 
   const searchGithubUser = async (user) => {
     toggleError();
     setLoading(true);
-    const resUserInfo = await axios(`${rootURL}/users/${user}`);
-    if (!resUserInfo) {
-      setLoading(false);
-      toggleError(true, `User not found under username ${user}`);
-    } else {
-      setGithubUser(resUserInfo.data);
-      const { login, followers_url } = resUserInfo.data;
-      const results = await Promise.allSettled([
-        axios(`${rootURL}/users/${login}/repos?per_page=200`),
-        axios(`${followers_url}?per_page=200`),
-      ]);
-      // repos
-      setLoading(false);
-      const [repos, followers] = results;
-      if (repos.status === "fulfilled") {
-        setRepos(repos.value.data);
-      } else {
-        toggleError(true, `failed to collect ${user}'s repos`);
-      }
-      if (followers.status === "fulfilled") {
-        const paginatedFollowers = paginate(followers.value.data);
-        setFollowers(paginatedFollowers);
-      } else {
-        toggleError(true, `failed to collect ${user}'s collowers`);
-      }
-    }
-  };
+    const response = await axios(`${rootURL}/users/${user}`).catch((err) =>
+      console.log(err)
+    );
+    if (response) {
+      setGithubUser(response.data);
+      const { login, followers_url } = response.data;
 
-  const toggleError = (show = false, msg = "") => {
-    setError({ show, msg });
+      await Promise.allSettled([
+        axios(`${rootURL}/users/${login}/repos?per_page=100`),
+        axios(`${followers_url}?per_page=100`)
+      ])
+        .then((results) => {
+          const [repos, followers] = results;
+          const status = 'fulfilled';
+          if (repos.status === status) {
+            setRepos(repos.value.data);
+          }
+          if (followers.status === status) {
+            setFollowers(paginate(followers.value.data));
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      toggleError(true, 'user not found');
+      console.log(error)
+    }
+    checkRequests();
+    setLoading(false);
   };
 
   return (
