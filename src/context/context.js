@@ -11,7 +11,7 @@ const GithubContext = React.createContext();
 const GithubProvider = ({ children }) => {
   const [githubUser, setGithubUser] = useState(mockUser);
   const [repos, setRepos] = useState(mockRepos);
-  const [followers, setFollowers] = useState(mockFollowers);
+  const [followers, setFollowers] = useState(paginate(mockFollowers));
   const [loading, setLoading] = useState(false);
   const [requests, setRequests] = useState(60);
   const [error, setError] = useState({ show: false, msg: "" });
