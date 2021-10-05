@@ -1,5 +1,5 @@
 export default
-    [
+    [[
         {
             "login": "gaospecial",
             "id": 107597,
@@ -600,4 +600,4 @@ export default
             "type": "User",
             "site_admin": false
         }
-    ]
+    ]]
